@@ -27,6 +27,7 @@ class DHT:
     # Hash function used to get the ID
     def getHashId(self, key):
         return key % self._size
+
     # Get distance between to IDs
     def distance(self, n1, n2):
         if n1 == n2:
