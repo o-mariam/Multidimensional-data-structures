@@ -2,7 +2,7 @@
 
 # insert key, DONE
 # delete key, DONE
-# update record based on key, 
+# update record based on key, DONE
 # node join, DONE
 # node leave, DONE
 # massive nodes’ failure, 
@@ -26,7 +26,7 @@ class Node:
     def updateFingerTable(self,Ring,k):
         del self.fingerTable[1:]
         for i in range(1, k):
-            self.fingerTable.append(Ring.Find_Node(Ring._startNode, self.ID + 2 ** i))
+            self.fingerTable.append(Ring.Find_ID(Ring._startNode, self.ID + 2 ** i))
 
 
 class Ring:
@@ -62,10 +62,13 @@ class Ring:
         return self._size - Str_ID + End_ID
 
 
-
     def Find_Node(self,Str_Node,key):
 
         ID=self.hash_sha1(key)
+        return self.Find_ID(self,Ring._startNode,ID)
+
+
+    def Find_ID(self,Str_Node,ID):
 
         Cur_Node = Str_Node
 
@@ -79,6 +82,7 @@ class Ring:
                 if self.Distance(Cur_Node.fingerTable[i].ID, ID) < self.Distance(Cur_Node.fingerTable[i + 1].ID, ID):
                     Next_Node = Cur_Node.fingerTable[i]
             Cur_Node = Next_Node
+
 
 
     def InsertKey(self,value):
