@@ -1,7 +1,12 @@
 # from Node_Class import Node
 
+<<<<<<< Updated upstream
 # insert key, 
 # delete key, 
+=======
+# insert key, DONE
+# delete key, DONE
+>>>>>>> Stashed changes
 # update record based on key, 
 # node join, DONE
 # node leave, DONE
@@ -47,7 +52,14 @@ class Ring:
 
     
 
+<<<<<<< Updated upstream
     def Find_Node(self,Str_Node,ID):
+=======
+        ID=self.hash_sha1(key)
+        return self.Find_ID(self._startNode,ID)
+
+    def Find_ID(self,Str_Node,ID):
+>>>>>>> Stashed changes
 
         Cur_Node = Str_Node
 
@@ -62,14 +74,74 @@ class Ring:
                     Next_Node = Cur_Node.fingerTable[i]
             Cur_Node = Next_Node
 
+<<<<<<< Updated upstream
     def Node_Join(self,New_ID):       #ID == IP , MAC ADR (changed parameter from Node to it, node constraction in function)
         
         New_Node = Node(New_ID)
         The_Node = self.Find_Node(self._startNode,New_Node.ID)
+=======
 
-        if The_Node.ID == New_Node.ID:
+
+    def InsertKey(self,value):
+        key=self.hash_sha1(value)
+
+        the_node = self.Find_Node(self._startNode,key)
+        the_node.Node_Data.append(value)
+
+
+    def DeleteKey(self,value):
+
+        key=self.hash_sha1(value)
+
+        the_node = self.Find_Node(self._startNode,key)
+
+        flag=True
+
+        for i in range(0,len(the_node.Node_Data)-1):
+            if the_node.Node_Data[i]==value:
+                flag=False
+                the_node.Node_Data.remove(value)
+
+        if flag==True:
+            print("Key not found")
+
+
+    def LookData(self,key):
+        ID = self.hash_sha1(key)
+        the_node=self.Find_ID(self._startNode,key)
+        if the_node.ID != ID:
+
+            print("Node does not exists.")
+        else:
+
+            if len(the_node.Node_Data)==1:
+                return print(the_node.Node_Data[0])
+            else:
+                for i in range(0,len(the_node.Node_Data)-1):
+                    return print(the_node.Node_Data[i])
+
+
+
+    def Node_Join(self,New_key):       #ID == IP , MAC ADR (changed parameter from Node to it, node constraction in function)
+        
+        New_ID=self.hash_sha1(New_key)
+        The_Node = self.Find_Node(self._startNode,New_key)
+>>>>>>> Stashed changes
+
+        if The_Node.ID == New_ID:
             print("Node already exists.")
 
+<<<<<<< Updated upstream
+=======
+            New_Node = Node(New_key)
+            Node_prev = The_Node.prev
+            New_Node.fingerTable[0]=The_Node
+            New_Node.prev=Node_prev
+            New_Node.next=The_Node
+            The_Node.prev=New_Node
+            Node_prev.fingerTable[0]=New_Node
+            Node_prev.next=New_Node
+>>>>>>> Stashed changes
 
         Node_prev = The_Node.prev
         New_Node.fingerTable[0]=The_Node
@@ -85,7 +157,12 @@ class Ring:
 
     def Node_Leave(self,Del_ID):
         
+<<<<<<< Updated upstream
         Del_Node = self.Find_Node(self._startNode,Del_ID)
+=======
+        Del_ID=self.hash_sha1(Del_key)
+        Del_Node = self.Find_Node(self._startNode,Del_key)
+>>>>>>> Stashed changes
 
         if Del_Node.ID != Del_ID:
             print("Node does not exists.")
