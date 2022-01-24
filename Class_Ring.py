@@ -2,7 +2,7 @@
 
 # insert key, DONE
 # delete key, DONE
-# update record based on key, 
+# update record based on key, DONE
 # node join, DONE
 # node leave, DONE
 # massive nodes’ failure, 
@@ -26,7 +26,7 @@ class Node:
     def updateFingerTable(self,Ring,k):
         del self.fingerTable[1:]
         for i in range(1, k):
-            self.fingerTable.append(Ring.Find_Node(Ring._startNode, self.ID + 2 ** i))
+            self.fingerTable.append(Ring.Find_ID(Ring._startNode, self.ID + 2 ** i))
 
 
 class Ring:
@@ -61,11 +61,13 @@ class Ring:
             return End_ID - Str_ID
         return self._size - Str_ID + End_ID
 
-
-
     def Find_Node(self,Str_Node,key):
 
         ID=self.hash_sha1(key)
+        return self.Find_ID(self,Ring._startNode,ID)
+
+
+    def Find_ID(self,Str_Node,ID):
 
         Cur_Node = Str_Node
 
@@ -106,9 +108,9 @@ class Ring:
             print("Key not found")
 
 
-    def LookData(self,ID):
-        key=self.hash_sha1(ID)
-        the_node=self.Find_Node(self._startNode,key)
+    def LookData(self,key):
+        ID=self.hash_sha1(key)
+        the_node=self.Find_Node(self._startNode,ID)
         if len(the_node.Node_Data)==1:
             return print(the_node.Node_Data[0])
         else:
@@ -117,11 +119,11 @@ class Ring:
 
 
 
-    def Node_Join(self,New_ID):       #ID == IP , MAC ADR (changed parameter from Node to it, node constraction in function)
+    def Node_Join(self,New_key):       #ID == IP , MAC ADR (changed parameter from Node to it, node constraction in function)
         
-        key=self.hash_sha1(New_ID)
+        ID=self.hash_sha1(New_key)
 
-        New_Node = Node(key)
+        New_Node = Node(ID)
         The_Node = self.Find_Node(self._startNode,New_Node.ID)
 
         if The_Node.ID == New_Node.ID:
@@ -136,22 +138,22 @@ class Ring:
             Node_prev.fingerTable[0]=New_Node
             Node_prev.next=New_Node
 
-            for key in New_Node.next.Node_Data:
-                if self.hash_sha1(key)<=New_Node.ID:
-                    New_Node.Node_Data.append(key)
-                    New_Node.next.Node_Data.remove(key)
+            for data in New_Node.next.Node_Data:
+                if self.hash_sha1(data)<=New_Node.ID:
+                    New_Node.Node_Data.append(data)
+                    New_Node.next.Node_Data.remove(data)
 
 
             New_Node.updateFingerTable(self,self._k)
 
 
 
-    def Node_Leave(self,Del_ID):
+    def Node_Leave(self,Del_key):
         
-        key=self.hash_sha1(Del_ID)
-        Del_Node = self.Find_Node(self._startNode,key)
+        Del_ID=self.hash_sha1(Del_key)
+        Del_Node = self.Find_Node(self._startNode,Del_ID)
 
-        if Del_Node.ID != key:
+        if Del_Node.ID != Del_ID:
             print("Node does not exists.")
 
         else:
@@ -163,8 +165,8 @@ class Ring:
             prev_node.next=next_node
 
 
-            for key in Del_Node.Node_Data: 
-                Del_Node.next.Node_Data.append(key)
+            for data in Del_Node.Node_Data: 
+                Del_Node.next.Node_Data.append(data)
 
 
             Cur_Node = self._startNode
