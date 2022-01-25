@@ -85,24 +85,24 @@ class Ring:
 
 
     def InsertKey(self,value):
-        key=self.hash_sha1(value)
+        ID=self.hash_sha1(value)
 
-        the_node = self.Find_Node(self._startNode,key)
+        the_node = self.Find_ID(self._startNode,ID)
         the_node.Node_Data.append(value)
 
 
-    def DeleteKey(self,value):
+    def DeleteKey(self,key):
 
-        key=self.hash_sha1(value)
+        ID=self.hash_sha1(key)
 
-        the_node = self.Find_Node(self._startNode,key)
+        the_node = self.Find_ID(self._startNode,ID)
 
         flag=True
 
         for i in range(0,len(the_node.Node_Data)-1):
-            if the_node.Node_Data[i]==value:
+            if the_node.Node_Data[i]==key:
                 flag=False
-                the_node.Node_Data.remove(value)
+                the_node.Node_Data.remove(key)
 
         if flag==True:
             print("Key not found")
@@ -110,7 +110,7 @@ class Ring:
 
     def LookData(self,key):
         ID=self.hash_sha1(key)
-        the_node=self.Find_Node(self._startNode,ID)
+        the_node=self.Find_ID(self._startNode,ID)
         if len(the_node.Node_Data)==1:
             return print(the_node.Node_Data[0])
         else:
@@ -124,7 +124,7 @@ class Ring:
         ID=self.hash_sha1(New_key)
 
         New_Node = Node(ID)
-        The_Node = self.Find_Node(self._startNode,New_Node.ID)
+        The_Node = self.Find_ID(self._startNode,New_Node.ID)
 
         if The_Node.ID == New_Node.ID:
             print("Node already exists.")
@@ -151,7 +151,7 @@ class Ring:
     def Node_Leave(self,Del_key):
         
         Del_ID=self.hash_sha1(Del_key)
-        Del_Node = self.Find_Node(self._startNode,Del_ID)
+        Del_Node = self.Find_ID(self._startNode,Del_ID)
 
         if Del_Node.ID != Del_ID:
             print("Node does not exists.")
