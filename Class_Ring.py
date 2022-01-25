@@ -84,11 +84,11 @@ class Ring:
 
 
 
-    def InsertKey(self,value):
-        ID=self.hash_sha1(value)
+    def InsertKey(self,key):
+        ID=self.hash_sha1(key)
 
         the_node = self.Find_ID(self._startNode,ID)
-        the_node.Node_Data.append(value)
+        the_node.Node_Data.append(key)
 
 
     def DeleteKey(self,key):
