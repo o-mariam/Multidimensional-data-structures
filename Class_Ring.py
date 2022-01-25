@@ -10,6 +10,8 @@
 # range queries and 
 # kNN Queries
 
+
+
 import hashlib
 
 
@@ -21,23 +23,28 @@ class Node:
         self.next = next
         self.Node_Data = []
         self.fingerTable=[next]
+        self.successor=[]
 
     #Update fingertable for the node 
     def updateFingerTable(self,Ring,k):
         del self.fingerTable[1:]
         for i in range(1, k):
             self.fingerTable.append(Ring.Find_ID(Ring._startNode, self.ID + 2 ** i))
+        
+        
 
 
 class Ring:
-    def __init__(self, k):
+    def __init__(self, k, r):
         self._k = k
+        self._r = r 
         self._size = 2 ** k 
         self._startNode = Node(0,k)
         self._startNode.fingerTable[0] = self._startNode
         self._startNode.prev = self._startNode
         self._startNode.next = self._startNode
         self._startNode.updateFingerTable(self, k)
+        self._startNode.successor=[self._startNode]
 
 
     def hash_sha1(self,key):
@@ -60,6 +67,7 @@ class Ring:
         if Str_ID < End_ID:
             return End_ID - Str_ID
         return self._size - Str_ID + End_ID
+
 
     def Find_Node(self,Str_Node,key):
 
@@ -144,7 +152,8 @@ class Ring:
                     New_Node.next.Node_Data.remove(data)
 
 
-            New_Node.updateFingerTable(self,self._k)
+                self.updateAllFingerTable(self,self._k)
+                self.updateSuccessor()
 
 
 
@@ -179,10 +188,34 @@ class Ring:
                 Cur_Node = Cur_Node.fingerTable[0]
         
             del Del_Node
+            self.updateAllFingerTable(self,self._k)
+            self.updateSuccessor()
 
 
 
+    def updateAllFingerTable(self):
+        self._startNode.updateFingerTable(self, self._k)
+        curr = self._startNode.fingerTable[0]
+        while curr != self._startNode:
+            curr.updateFingerTable(self, self._k)
+            curr = curr.fingerTable[0]
 
+
+    def updateSuccessor(self):
+        current=self._startNode
+        flag=0
+        while flag==0:
+            if self._r==1:
+                    current.successor[0]=current.next
+            else:
+                point=current
+                for i in range(0,self._r-1):
+                    current.successor[i]=point.next
+                    point=point.next
+            
+            current=current.next
+            if current==self._startNode:
+                flag=1       
 
 
 
