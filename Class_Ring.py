@@ -13,6 +13,7 @@
 
 
 import hashlib
+import sys
 
 
 
@@ -69,27 +70,34 @@ class Ring:
         return self._size - Str_ID + End_ID
 
 
-    def Find_Node(self,Str_Node,key):
-
-        ID=self.hash_sha1(key)
-        return self.Find_ID(self,Ring._startNode,ID)
-
-
-    def Find_ID(self,Str_Node,ID):
+    def Find_ID(self,Str_Node,New_ID):
 
         Cur_Node = Str_Node
 
         while True:
-            if Cur_Node.ID == ID:
+            if Cur_Node.ID ==New_ID:
+                print("2")
                 return Cur_Node
-            if self.Distance(Cur_Node.ID, ID) <= self.Distance(Cur_Node.fingerTable[0].ID, ID):
+
+            if self.Distance(Cur_Node.ID, New_ID) <= self.Distance(Cur_Node.fingerTable[0].ID, New_ID):
+                print('3')
                 return Cur_Node.fingerTable[0]
-            Tab = len(Cur_Node.fingerTable) -1
+
+            Tab = len(Cur_Node.fingerTable)
+            Next_Node=Cur_Node.fingerTable[-1]
+
             for i in range(0,Tab):
-                if self.Distance(Cur_Node.fingerTable[i].ID, ID) < self.Distance(Cur_Node.fingerTable[i + 1].ID, ID):
+                if self.Distance(Cur_Node.fingerTable[i].ID, New_ID) < self.Distance(Cur_Node.fingerTable[i + 1].ID, New_ID):
+                    print('4',i)
                     Next_Node = Cur_Node.fingerTable[i]
             Cur_Node = Next_Node
+            # print(Cur_Node.ID,Next_Node.ID,New_ID,self.Distance(Cur_Node.ID, New_ID),self.Distance(Cur_Node.fingerTable[0].ID, New_ID),Cur_Node.fingerTable[0].ID)
 
+    def Find_Node(self,key):
+
+        New_ID=self.hash_sha1(key)
+        print('1')
+        return self.Find_ID(self._startNode,New_ID)
 
 
     def InsertKey(self,key):
@@ -107,7 +115,7 @@ class Ring:
 
         flag=True
 
-        for i in range(0,len(the_node.Node_Data)-1):
+        for i in range(0,len(the_node.Node_Data)):
             if the_node.Node_Data[i]==key:
                 flag=False
                 the_node.Node_Data.remove(key)
@@ -122,7 +130,7 @@ class Ring:
         if len(the_node.Node_Data)==1:
             return print(the_node.Node_Data[0])
         else:
-            for i in range(0,len(the_node.Node_Data)-1):
+            for i in range(0,len(the_node.Node_Data)):
                 return print(the_node.Node_Data[i])
 
 
@@ -135,7 +143,8 @@ class Ring:
         The_Node = self.Find_ID(self._startNode,New_Node.ID)
 
         if The_Node.ID == New_Node.ID:
-            print("Node already exists.")
+            print("Node already exists.",New_key)
+            return
         else:
 
             Node_prev = The_Node.prev
@@ -207,9 +216,12 @@ class Ring:
         while flag==0:
             if self._r==1:
                     current.successor[0]=current.next
+                    return
             else:
                 point=current
-                for i in range(0,self._r-1):
+                
+                for i in range(0,self._r):
+                    print("aaaaa",i,self._r)
                     current.successor[i]=point.next
                     point=point.next
             
@@ -219,6 +231,33 @@ class Ring:
 
 
 
+    def RepairRing(self):
+
+        current=self._startNode
+        flag=False
+
+        while isinstance(current.next,Node):
+            current=current.next
+            if current==self._startNode:
+                if flag==False:
+                    self.updateSuccessor()
+                return
+        flag=True
+
+        if self._r==1:
+            print("Too many node failures , ring destroyed")
+            sys.exit()
+        else: 
+            for i in range(0,self._r): 
+                if isinstance(current.successor[i],Node):
+                    current.next=current.successor[i]
+            if isinstance(current.next,Node):       
+                self.RepairRing()
+                return 
+            else:
+                print("Too many node failures , ring destroyed")
+                sys.exit()                 
+        
 
 
 
@@ -243,66 +282,3 @@ class Ring:
 
 
 
-
-
-
-
-
-
-# def stabilize(sorted_list, ring_size):
-#     #stabilizing nexts prevs
-#     for item in sorted_list:
-#         item.updatefingertable(sorted_list, ring_size)
-#         if sorted_list.index(item) + 1 >= len(sorted_list):  # if it's the last element
-#             item.next = sorted_list[0]
-#             item.prev = sorted_list[sorted_list.index(item) - 1]
-#         elif item == sorted_list[0]:  # if it's the first element
-#             item.next = sorted_list[sorted_list.index(item) + 1]
-#             item.prev = sorted_list[-1]
-#         else:
-#             item.next = sorted_list[sorted_list.index(item) + 1]
-#             item.prev = sorted_list[sorted_list.index(item) - 1]
-
-# #Inserting a new key into the ring , the updating the finger table
-# def insert(list, new_key):  
-#     print("Adding: ", new_key)
-#     New_Node = Node(new_key)
-#     # Adding the node to the list
-#     list.append(New_Node)  
-
-#     # Sorting the list
-#     list.sort(key=lambda item: item.id_) 
-#     # Stabilizing the list
-#     stabilize(list, ring_size)  
-
-#     return list
-
-# #Deleting a node
-# def delete(sorted_list, key):
-#     print("Deleting: ", key)
-#     Del_Node = lookup(sorted_list,)
-#     sorted_list.(remove(Del_Node))
-#     stabilize(sorted_list, ring_size)
-
-#     return sorted_list
-
-# def Distance(self, Str_ID, End_ID):
-#         if Str_ID == End_ID:
-#             return 0
-#         if Str_ID < End_ID:
-#             return End_ID - Str_ID
-
-# def lookup(sorted_list,Str_Node,Goal):
-#      Cur_Node = Str_Node
-#         while True:
-#             if Cur_Node.ID == Goal:
-#                 return Cur_Node
-#             if self.Distance(Cur_Node.ID, Goal) <= self.Distance(Cur_Node.fingerTable[0].ID, Goal):
-#                 return Cur_Node.fingerTable[0]
-#             Table_Size = len(Cur_Node.fingerTable)-1
-#             Next_Node = Cur_Node.fingerTable[-1]
-#             for i in range(0,Table_Size):
-#                 if self.Distance(Cur_Node.fingerTable[i].ID, Goal) < self.Distance(Cur_Node.fingerTable[i + 1].ID, Goal):
-#                     Next_Node = Cur_Node.fingerTable[i]
-#                 i = i + 1
-#             Cur_Node = Next_Node
