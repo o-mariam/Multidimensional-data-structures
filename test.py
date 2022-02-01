@@ -16,19 +16,24 @@ ring1.Node_Join('c')
 
 
 node1=ring1._startNode
-print("ok")
 node2=ring1.Find_Node('a')
-print("ok")
 node3=ring1.Find_Node('ba')
-print("ok")
 node4=ring1.Find_Node('c')
-print("ok")
+
 
 ring1.updateSuccessor()
-print(node1.successor[0].ID,node1.successor[1].ID)
-print(node2.successor[0].ID,node2.successor[1].ID)
-print(node3.successor[0].ID,node3.successor[1].ID)
-print(node4.successor[0].ID,node4.successor[1].ID)
+print(node1.ID,node1.successor[0].ID,node1.successor[1].ID)
+print(node2.ID,node2.successor[0].ID,node2.successor[1].ID)
+print(node3.ID,node3.successor[0].ID,node3.successor[1].ID)
+print(node4.ID,node4.successor[0].ID,node4.successor[1].ID)
+
+del node3
+NodeTest=ring1.Find_ID(node1,25)
+print(NodeTest.ID)
+ring1.RepairRing()
+print(node1.ID,node1.successor[0].ID,node1.successor[1].ID)
+print(node2.ID,node2.successor[0].ID,node2.successor[1].ID)
+print(node4.ID,node4.successor[0].ID,node4.successor[1].ID)
 # ring1.InsertKey('a')
 
 

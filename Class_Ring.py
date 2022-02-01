@@ -24,7 +24,7 @@ class Node:
         self.next = next
         self.Node_Data = []
         self.fingerTable=[next]
-        self.successor=[]
+        self.successor=[next]
 
     #Update fingertable for the node 
     def updateFingerTable(self,Ring,k):
@@ -86,7 +86,7 @@ class Ring:
             Tab = len(Cur_Node.fingerTable)
             Next_Node=Cur_Node.fingerTable[-1]
 
-            for i in range(0,Tab):
+            for i in range(0,Tab-1):
                 if self.Distance(Cur_Node.fingerTable[i].ID, New_ID) < self.Distance(Cur_Node.fingerTable[i + 1].ID, New_ID):
                     print('4',i)
                     Next_Node = Cur_Node.fingerTable[i]
@@ -126,7 +126,7 @@ class Ring:
 
     def LookData(self,key):
         ID=self.hash_sha1(key)
-        the_node=self.Find_ID(self._startNode,ID)
+        the_node=self.Find_ID(self._startNode.ID,ID)
         if len(the_node.Node_Data)==1:
             return print(the_node.Node_Data[0])
         else:
@@ -219,12 +219,16 @@ class Ring:
                     return
             else:
                 point=current
+                del current.successor[1:]
+                current.successor[0]=point.next
                 
-                for i in range(0,self._r):
-                    print("aaaaa",i,self._r)
-                    current.successor[i]=point.next
-                    point=point.next
-            
+                if self._r > 2:
+                    for i in range(0,self._r):
+                        print("aaaaa",i,self._r)
+                        current.successor.append(point.next)
+                        point=point.next
+                else:
+                    current.successor.append(point.next.next)
             current=current.next
             if current==self._startNode:
                 flag=1       
