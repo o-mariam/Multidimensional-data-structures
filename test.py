@@ -2,7 +2,7 @@ from Class_Ring import Node,Ring
 import hashlib
 
 
-ring1=Ring(5)
+ring1=Ring(5,2)
 
 # print(ring1._k)
 
@@ -11,12 +11,36 @@ ring1=Ring(5)
 #print(ring1.hash_sha1('a'))
 
 ring1.Node_Join('a')
+ring1.Node_Join('ba')
+ring1.Node_Join('c')
+
 
 node1=ring1._startNode
+node2=ring1.Find_Node('a')
+node3=ring1.Find_Node('ba')
+node4=ring1.Find_Node('c')
 
-ring1.InsertKey('a')
 
-ring1.LookData('a')
+ring1.updateSuccessor()
+print(node1.ID,node1.successor[0].ID,node1.successor[1].ID)
+print(node2.ID,node2.successor[0].ID,node2.successor[1].ID)
+print(node3.ID,node3.successor[0].ID,node3.successor[1].ID)
+print(node4.ID,node4.successor[0].ID,node4.successor[1].ID)
+
+
+des=[24,25]
+ring1.Destroy(des)
+
+# NodeTest=ring1.Find_ID(node1,25)
+# print(NodeTest.ID)
+ring1.RepairRing()
+print(node1.ID,node1.successor[0].ID,node1.successor[1].ID)
+# print(node2.ID,node2.successor[0].ID,node2.successor[1].ID)
+# print(node4.ID,node4.successor[0].ID,node4.successor[1].ID)
+# ring1.InsertKey('a')
+
+
+# ring1.LookData('a')
 
 # # the_node=ring1.Find_ID(ring1._startNode,2)
 # # print(the_node.Node_Data[0])
