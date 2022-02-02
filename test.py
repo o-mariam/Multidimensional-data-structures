@@ -27,13 +27,16 @@ print(node2.ID,node2.successor[0].ID,node2.successor[1].ID)
 print(node3.ID,node3.successor[0].ID,node3.successor[1].ID)
 print(node4.ID,node4.successor[0].ID,node4.successor[1].ID)
 
-del node3
-NodeTest=ring1.Find_ID(node1,25)
-print(NodeTest.ID)
+
+des=[24,25]
+ring1.Destroy(des)
+
+# NodeTest=ring1.Find_ID(node1,25)
+# print(NodeTest.ID)
 ring1.RepairRing()
 print(node1.ID,node1.successor[0].ID,node1.successor[1].ID)
-print(node2.ID,node2.successor[0].ID,node2.successor[1].ID)
-print(node4.ID,node4.successor[0].ID,node4.successor[1].ID)
+# print(node2.ID,node2.successor[0].ID,node2.successor[1].ID)
+# print(node4.ID,node4.successor[0].ID,node4.successor[1].ID)
 # ring1.InsertKey('a')
 
 

@@ -5,7 +5,7 @@
 # update record based on key, DONE
 # node join, DONE
 # node leave, DONE
-# massive nodes’ failure, 
+# massive nodes’ failure, DONE
 # exact match, 
 # range queries and 
 # kNN Queries
@@ -14,6 +14,7 @@
 
 import hashlib
 import sys
+from tkinter import NONE
 
 
 
@@ -76,11 +77,9 @@ class Ring:
 
         while True:
             if Cur_Node.ID ==New_ID:
-                print("2")
                 return Cur_Node
 
             if self.Distance(Cur_Node.ID, New_ID) <= self.Distance(Cur_Node.fingerTable[0].ID, New_ID):
-                print('3')
                 return Cur_Node.fingerTable[0]
 
             Tab = len(Cur_Node.fingerTable)
@@ -88,7 +87,6 @@ class Ring:
 
             for i in range(0,Tab-1):
                 if self.Distance(Cur_Node.fingerTable[i].ID, New_ID) < self.Distance(Cur_Node.fingerTable[i + 1].ID, New_ID):
-                    print('4',i)
                     Next_Node = Cur_Node.fingerTable[i]
             Cur_Node = Next_Node
             # print(Cur_Node.ID,Next_Node.ID,New_ID,self.Distance(Cur_Node.ID, New_ID),self.Distance(Cur_Node.fingerTable[0].ID, New_ID),Cur_Node.fingerTable[0].ID)
@@ -96,11 +94,11 @@ class Ring:
     def Find_Node(self,key):
 
         New_ID=self.hash_sha1(key)
-        print('1')
         return self.Find_ID(self._startNode,New_ID)
 
 
     def InsertKey(self,key):
+
         ID=self.hash_sha1(key)
 
         the_node = self.Find_ID(self._startNode,ID)
@@ -264,6 +262,30 @@ class Ring:
         
 
 
+    def Destroy(self,De_List):
+
+        current = self._startNode
+        Node_List=[]
+        flag=False
+
+        for i in range(len(De_List)):
+            Node_List.append(self.Find_ID(self._startNode,De_List[i]))
+
+        while flag==False:
+            node_next=current.next
+            for i in range(len(Node_List)):
+                if current.next==Node_List[i]:current.next=None
+                if current.prev==Node_List[i]:current.prev=None
+            
+                for j in range(len(current.fingerTable)):
+                    if current.fingerTable[j]==Node_List[i]:current.fingerTable[j]=None
+                for j in range(len(current.successor)):
+                    if current.successor[j]==Node_List[i]:current.successor[j]=None
+            current=node_next
+
+            if current==self._startNode:
+                flag=True
+        
 
 
 
