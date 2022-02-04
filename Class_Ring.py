@@ -87,6 +87,7 @@ class Ring:
 
             for i in range(0,Tab-1):
                 if self.Distance(Cur_Node.fingerTable[i].ID, New_ID) < self.Distance(Cur_Node.fingerTable[i + 1].ID, New_ID):
+                
                     Next_Node = Cur_Node.fingerTable[i]
             Cur_Node = Next_Node
             # print(Cur_Node.ID,Next_Node.ID,New_ID,self.Distance(Cur_Node.ID, New_ID),self.Distance(Cur_Node.fingerTable[0].ID, New_ID),Cur_Node.fingerTable[0].ID)
@@ -94,11 +95,12 @@ class Ring:
     def Find_Node(self,key):
 
         New_ID=self.hash_sha1(key)
+
         return self.Find_ID(self._startNode,New_ID)
 
 
     def InsertKey(self,key):
-
+        
         ID=self.hash_sha1(key)
 
         the_node = self.Find_ID(self._startNode,ID)
@@ -118,6 +120,7 @@ class Ring:
                 flag=False
                 the_node.Node_Data.remove(key)
 
+
         if flag==True:
             print("Key not found")
 
@@ -128,8 +131,9 @@ class Ring:
         if len(the_node.Node_Data)==1:
             return print(the_node.Node_Data[0])
         else:
-            for i in range(0,len(the_node.Node_Data)):
-                return print(the_node.Node_Data[i])
+            for i in the_node.Node_Data:
+                print(i)
+                return
 
 
 
@@ -189,9 +193,9 @@ class Ring:
             Cng_Node = Del_Node.fingerTable[0]
 
             for i in range(0,self._size):
-                for j in range(0,self._k):
-                    if Cur_Node.fingerTable[j] == Del_Node:
-                        Cur_Node.fingerTable[j] = Cng_Node
+                for finger in Cur_Node.fingerTable:
+                    if finger == Del_Node:
+                        finger = Cng_Node
                 Cur_Node = Cur_Node.fingerTable[0]
         
             del Del_Node
@@ -222,7 +226,6 @@ class Ring:
                 
                 if self._r > 2:
                     for i in range(0,self._r):
-                        print("aaaaa",i,self._r)
                         current.successor.append(point.next)
                         point=point.next
                 else:
@@ -258,53 +261,4 @@ class Ring:
                 return 
             else:
                 print("Too many node failures , ring destroyed")
-                sys.exit()                 
-        
-
-
-    def Destroy(self,De_List):
-
-        current = self._startNode
-        Node_List=[]
-        flag=False
-
-        for i in range(len(De_List)):
-            Node_List.append(self.Find_ID(self._startNode,De_List[i]))
-
-        while flag==False:
-            node_next=current.next
-            for i in range(len(Node_List)):
-                if current.next==Node_List[i]:current.next=None
-                if current.prev==Node_List[i]:current.prev=None
-            
-                for j in range(len(current.fingerTable)):
-                    if current.fingerTable[j]==Node_List[i]:current.fingerTable[j]=None
-                for j in range(len(current.successor)):
-                    if current.successor[j]==Node_List[i]:current.successor[j]=None
-            current=node_next
-
-            if current==self._startNode:
-                flag=True
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+                sys.exit()
