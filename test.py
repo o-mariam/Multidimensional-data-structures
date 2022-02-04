@@ -1,11 +1,21 @@
 from Class_Ring import Ring
-# ring1=Ring(5,2)
+ring1=Ring(6,2)
+print(ring1._size)
+
 # print(ring1._k)
 # node2=Node(2)
 # print(ring1.hash_sha1('a'))
-# ring1.Node_Join('a')
-# ring1.Node_Join('ba')
-# ring1.Node_Join('c')
+ring1.Node_Join('a')
+ring1.Node_Join('ba')
+ring1.Node_Join('c')
+
+ring1.InsertKey('a',"dfhssiuwar74w")
+ring1.InsertKey('ba',"ifugwafa")
+ring1.InsertKey('c',"bdaiserfgua")
+# ring1.Range_Query(1,64)
+ring1.LookData(56)
+
+# ring1.KNN(25,3)
 # node1=ring1._startNode
 # node2=ring1.Find_Node('a')
 # node3=ring1.Find_Node('ba')

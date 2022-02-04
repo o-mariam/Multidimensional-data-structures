@@ -6,13 +6,14 @@
 # node join, DONE
 # node leave, DONE
 # massive nodes’ failure, DONE
-# exact match, 
-# range queries and 
-# kNN Queries
+# exact match, DONEEEEE
+# range queries and DONEEEEEE
+# kNN Queries DONE
 
 
 
 import hashlib
+from pickle import TRUE
 import sys
 from tkinter import NONE
 
@@ -26,6 +27,7 @@ class Node:
         self.Node_Data = []
         self.fingerTable=[next]
         self.successor=[next]
+        self.Node_Keys=[]
 
     #Update fingertable for the node 
     def updateFingerTable(self,Ring,k):
@@ -99,15 +101,16 @@ class Ring:
         return self.Find_ID(self._startNode,New_ID)
 
 
-    def InsertKey(self,key):
+    def InsertKey(self,key,data):
         
         ID=self.hash_sha1(key)
-
+        
         the_node = self.Find_ID(self._startNode,ID)
-        the_node.Node_Data.append(key)
+        the_node.Node_Keys.append(key)
+        the_node.Node_Data.append(data)
 
 
-    def DeleteKey(self,key):
+    def DeleteKey(self,key,data):
 
         ID=self.hash_sha1(key)
 
@@ -118,22 +121,27 @@ class Ring:
         for i in range(0,len(the_node.Node_Data)):
             if the_node.Node_Data[i]==key:
                 flag=False
-                the_node.Node_Data.remove(key)
-
+                the_node.Node_Keys.remove(key)
+                the_node.Node_Data.remove(the_node.Node_Data[i])
 
         if flag==True:
             print("Key not found")
 
 
-    def LookData(self,key):
-        ID=self.hash_sha1(key)
-        the_node=self.Find_ID(self._startNode.ID,ID)
-        if len(the_node.Node_Data)==1:
-            return print(the_node.Node_Data[0])
-        else:
-            for i in the_node.Node_Data:
-                print(i)
-                return
+    def LookData(self,target_id):
+
+        # ID=self.hash_sha1(key)
+        the_node=self.Find_ID(self._startNode,target_id)
+
+        for i in range(len(the_node.Node_Data)):
+            print('(','key:',the_node.Node_Keys[i],'value:',the_node.Node_Data[i],')')
+
+        # if len(the_node.Node_Data)==1:
+        #     return print(the_node.Node_Data[0])
+        # else:
+        #     for i in the_node.Node_Data:
+        #         print(i)
+        #         return
 
 
 
@@ -157,10 +165,12 @@ class Ring:
             Node_prev.fingerTable[0]=New_Node
             Node_prev.next=New_Node
 
-            for data in New_Node.next.Node_Data:
-                if self.hash_sha1(data)<=New_Node.ID:
-                    New_Node.Node_Data.append(data)
-                    New_Node.next.Node_Data.remove(data)
+            for data in range(len(New_Node.next.Node_Data)):
+                if self.hash_sha1(New_Node.next.Node_Keys[data])<=New_Node.ID:
+                    New_Node.Node_Data.append(New_Node.next.Node_Data[data])
+                    New_Node.next.Node_Data.remove(New_Node.next.Node_Data[data])
+                    New_Node.Node_Keys.append(New_Node.next.Node_Keys[data])
+                    New_Node.next.Node_Keys.remove(New_Node.next.Node_Keys[data])
 
 
                 self.updateAllFingerTable(self,self._k)
@@ -185,9 +195,9 @@ class Ring:
             prev_node.next=next_node
 
 
-            for data in Del_Node.Node_Data: 
-                Del_Node.next.Node_Data.append(data)
-
+            for data in range(len(Del_Node.Node_Data)): 
+                Del_Node.next.Node_Data.append(Del_Node.next.Node_Data[data])
+                Del_Node.next.Node_Keys.append(Del_Node.next.Node_Keys[data])
 
             Cur_Node = self._startNode
             Cng_Node = Del_Node.fingerTable[0]
@@ -262,3 +272,42 @@ class Ring:
             else:
                 print("Too many node failures , ring destroyed")
                 sys.exit()
+
+
+
+    def Range_Query(self,start,end):
+
+        current=self._startNode
+        while TRUE:
+            if current.ID>=start and current.ID<=end:
+                print("Node:",current.ID)
+                self.LookData(current.ID)
+
+            current=current.next
+            if current==self._startNode:
+                return
+
+
+        
+    def KNN(self,target,kn):
+
+        target_node=self.Find_ID(self._startNode,target)
+        if self.Distance(target_node.ID,target)>self.Distance(target_node.prev.ID,target):
+            target_node=target_node.prev
+
+        print("Node:",target_node.ID)
+        self.LookData(target_node.ID)
+        next_target=target_node.next
+        prev_target=target_node.prev
+
+        for i in range(kn-1):
+            if self.Distance(target,next_target.ID)>self.Distance(prev_target.ID,target):
+                print("Node:",prev_target.ID)
+                self.LookData(prev_target.ID)
+                prev_target=prev_target.prev
+            else:
+                print("Node:",next_target.ID)
+                self.LookData(next_target.ID)
+                next_target=next_target.next
+    
+
