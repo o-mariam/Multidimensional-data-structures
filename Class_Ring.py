@@ -173,7 +173,7 @@ class Ring:
                     New_Node.next.Node_Keys.remove(New_Node.next.Node_Keys[data])
 
 
-                self.updateAllFingerTable(self,self._k)
+                self.updateAllFingerTable()
                 self.updateSuccessor()
 
 
@@ -200,19 +200,33 @@ class Ring:
                 Del_Node.next.Node_Keys.append(Del_Node.next.Node_Keys[data])
 
             Cur_Node = self._startNode
-            Cng_Node = Del_Node.fingerTable[0]
+            Cng_Node = Cur_Node.fingerTable[0]
 
-            for i in range(0,self._size):
-                for finger in Cur_Node.fingerTable:
-                    if finger == Del_Node:
-                        finger = Cng_Node
-                Cur_Node = Cur_Node.fingerTable[0]
-        
-            del Del_Node
-            self.updateAllFingerTable(self,self._k)
+            
+            while True:
+                for i in range(len(Cur_Node.fingerTable)) :
+                    if Cur_Node.fingerTable[i] == Del_Node:
+
+                        Cur_Node.fingerTable[i] = Del_Node.next
+
+                Cur_Node = Cng_Node
+                Cng_Node = Cur_Node.fingerTable[0]
+
+                if Cur_Node == self._startNode:
+                    break        
+    
+            self.updateAllFingerTable()
             self.updateSuccessor()
 
 
+
+    '''
+         for i in range(0,self._size):
+             for finger in Cur_Node.fingerTable:
+                    if finger == Del_Node:
+                        finger = Cng_Node
+                Cur_Node = Cur_Node.fingerTable[0]
+    '''
 
     def updateAllFingerTable(self):
         self._startNode.updateFingerTable(self, self._k)
