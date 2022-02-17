@@ -27,7 +27,6 @@ class Node:
         self.Node_Data = []
         self.fingerTable=[next]
         self.successor=[next]
-        self.Node_Keys=[]
 
     #Update fingertable for the node 
     def updateFingerTable(self,Ring,k):
@@ -101,31 +100,29 @@ class Ring:
         return self.Find_ID(self._startNode,New_ID)
 
 
-    def InsertKey(self,key,data):
+    def InsertKey(self,data):
         
-        ID=self.hash_sha1(key)
+        ID=self.hash_sha1(data)
         
         the_node = self.Find_ID(self._startNode,ID)
-        the_node.Node_Keys.append(key)
         the_node.Node_Data.append(data)
 
 
-    def DeleteKey(self,key,data):
+    def DeleteKey(self,data):
 
-        ID=self.hash_sha1(key)
+        ID=self.hash_sha1(data)
 
         the_node = self.Find_ID(self._startNode,ID)
 
         flag=True
 
         for i in range(0,len(the_node.Node_Data)):
-            if the_node.Node_Data[i]==key:
+            if the_node.Node_Data[i]==data:
                 flag=False
-                the_node.Node_Keys.remove(key)
                 the_node.Node_Data.remove(the_node.Node_Data[i])
 
         if flag==True:
-            print("Key not found")
+            print("Data not found")
 
 
     def LookData(self,target_id):
@@ -133,8 +130,10 @@ class Ring:
         # ID=self.hash_sha1(key)
         the_node=self.Find_ID(self._startNode,target_id)
 
+        print("Key : ", the_node.ID)
+
         for i in range(len(the_node.Node_Data)):
-            print('(','key:',the_node.Node_Keys[i],'value:',the_node.Node_Data[i],')')
+            print('(','value:',the_node.Node_Data[i],')')
 
         # if len(the_node.Node_Data)==1:
         #     return print(the_node.Node_Data[0])
@@ -166,15 +165,13 @@ class Ring:
             Node_prev.next=New_Node
 
             for data in range(len(New_Node.next.Node_Data)):
-                if self.hash_sha1(New_Node.next.Node_Keys[data])<=New_Node.ID:
+                if self.hash_sha1(New_Node.next.Node_Data[data])<=New_Node.ID:
                     New_Node.Node_Data.append(New_Node.next.Node_Data[data])
                     New_Node.next.Node_Data.remove(New_Node.next.Node_Data[data])
-                    New_Node.Node_Keys.append(New_Node.next.Node_Keys[data])
-                    New_Node.next.Node_Keys.remove(New_Node.next.Node_Keys[data])
+       
 
-
-                self.updateAllFingerTable()
-                self.updateSuccessor()
+            #self.updateAllFingerTable()
+            #self.updateSuccessor()
 
 
 
@@ -197,7 +194,7 @@ class Ring:
 
             for data in range(len(Del_Node.Node_Data)): 
                 Del_Node.next.Node_Data.append(Del_Node.next.Node_Data[data])
-                Del_Node.next.Node_Keys.append(Del_Node.next.Node_Keys[data])
+                
 
             Cur_Node = self._startNode
             Cng_Node = Cur_Node.fingerTable[0]
@@ -325,3 +322,26 @@ class Ring:
                 next_target=next_target.next
     
 
+    def Destroy(self,De_List):
+
+        current = self._startNode
+        Node_List=[]
+        flag=False
+
+        for i in range(len(De_List)):
+            Node_List.append(self.Find_ID(self._startNode,De_List[i]))
+
+        while flag==False:
+            node_next=current.next
+            for i in range(len(Node_List)):
+                if current.next==Node_List[i]:current.next=None
+                if current.prev==Node_List[i]:current.prev=None
+            
+                for j in range(len(current.fingerTable)):
+                    if current.fingerTable[j]==Node_List[i]:current.fingerTable[j]=None
+                for j in range(len(current.successor)):
+                    if current.successor[j]==Node_List[i]:current.successor[j]=None
+            current=node_next
+
+            if current==self._startNode:
+                flag=True
