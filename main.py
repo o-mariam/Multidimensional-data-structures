@@ -49,11 +49,11 @@ t.toc("Build time")
 
 while True:
     print("\n1.  NODE JOIN  \n2.  NODE LEAVE  \n3.  INSERT KEY \n4.  DELETE KEY  \n5.  UPDATE VALUE (based on key) \n6.  DESTROY NODES (node failure)  \n7.  EXACT MATCH \n8.  RANGE QUERY \n9.  KNN QUERY \n10. QUIT")
-    choice =  int(input("\n---* INPUT CHOICE:  ") or "12")
+    choice =  input("\n---* INPUT CHOICE:  ")
 
     #NODE JOIN
 
-    if choice == 1:
+    if choice == "1":
         node_ip = input(" Input node IP:  ")
 
         t.tic()
@@ -64,7 +64,7 @@ while True:
 
     #NODE LEAVE 
 
-    elif choice == 2:
+    elif choice == "2":
         node_ip = input(" Input node IP:  ")
 
         t.tic()
@@ -73,7 +73,7 @@ while True:
 
     #INSERT KEY
 
-    elif choice == 3:
+    elif choice == "3":
         value = input("Input movie title: ")
 
         t.tic()
@@ -82,7 +82,7 @@ while True:
 
     #DELETE KEY
 
-    elif choice == 4: 
+    elif choice == "4": 
         value = input("Input movie title to delete: ")
         t.tic()
         ring1.DeleteKey(value)
@@ -90,7 +90,7 @@ while True:
 
     #UPDATE RECORD on KEY
 
-    elif choice == 5: 
+    elif choice == "5": 
         node_ID = int(input("Input node value key: "))
         t.tic()
         ring1.LookData(node_ID)
@@ -99,7 +99,7 @@ while True:
 
 
     #ID of Nodes to Destroy And the attemp to repair the ring
-    elif choice == 6: 
+    elif choice == "6": 
         num  = int(input("Input how many nodes to destroy: "))
         node_list = []
         for i in range(num):
@@ -114,7 +114,7 @@ while True:
     
     #EXACT MATCH
 
-    elif choice == 7:
+    elif choice == "7":
         node_id = int(input("Give the id of the start node:(default =0) " ) or "0")
         value=input("Give me the name of the movie to search for:")
 
@@ -143,7 +143,7 @@ while True:
 
     #Range Query From start Node To end Node
             
-    elif choice == 8:
+    elif choice == "8":
         start_node_id = int(input("Give the id of the start node:(default =0) " ) or "0")
         end_node_id = int(input("Give the id of the end node(default=rings end):" ) or str(ring1._size))
         t.tic()
@@ -158,7 +158,7 @@ while True:
         t.toc("RANGE QUERY TIME:")
 
     #kNN Query k is the number of nodes we are seeking near the target Node
-    elif choice == 9:
+    elif choice == "9":
      
         target_id=int(input("Give the id of the target node: " ))
         kn=int(input("Give the number of neighbors:" ) )
@@ -168,7 +168,7 @@ while True:
 
     #Exit the program
 
-    elif choice == 10:
+    elif choice == "10":
         break
 
     #Catch wrong input outside the menu range    
