@@ -48,8 +48,8 @@ t.toc("Build time")
 #Main Program Menu
 
 while True:
-    print("\n1.  NODE JOIN  \n2.  NODE LEAVE  \n3.  INSERT KEY \n4.  UPDATE VALUE (based on key)  \n5.  DELETE KEY \n6.  DESTROY NODES (node failure)  \n7.  EXACT MATCH \n8.  RANGE QUERY \n9.  KNN QUERY \n10. QUIT")
-    choice =  int(input("\n---* INPUT CHOICE:  "))
+    print("\n1.  NODE JOIN  \n2.  NODE LEAVE  \n3.  INSERT KEY \n4.  DELETE KEY  \n5.  UPDATE VALUE (based on key) \n6.  DESTROY NODES (node failure)  \n7.  EXACT MATCH \n8.  RANGE QUERY \n9.  KNN QUERY \n10. QUIT")
+    choice =  int(input("\n---* INPUT CHOICE:  ") or "12")
 
     #NODE JOIN
 
@@ -80,28 +80,30 @@ while True:
         ring1.InsertKey(value)
         t.toc("INSERT RECORD TIME: ") 
 
-    #UPDATE RECORD on KEY
-
-    elif choice == 4: 
-        node_ID = int(input("Input node value key: "))
-        t.tic()
-        ring1.LookData(node_ID)
-        t.toc("UPDATE RECORD TIME: ")
-
     #DELETE KEY
 
-    elif choice == 5: 
+    elif choice == 4: 
         value = input("Input movie title to delete: ")
         t.tic()
         ring1.DeleteKey(value)
         t.toc("DELETE RECORD TIME: ") 
 
+    #UPDATE RECORD on KEY
+
+    elif choice == 5: 
+        node_ID = int(input("Input node value key: "))
+        t.tic()
+        ring1.LookData(node_ID)
+        t.toc("UPDATE RECORD TIME: ")
+
+
+
     #ID of Nodes to Destroy And the attemp to repair the ring
     elif choice == 6: 
-        num  = input("Input how many nodes to destroy: ")
+        num  = int(input("Input how many nodes to destroy: "))
         node_list = []
         for i in range(num):
-            node_ID = input("Input Node ID to destroy: ")
+            node_ID = int(input("Input Node ID to destroy: "))
             node_list.append(node_ID)
             
         ring1.Destroy(node_list)
@@ -129,11 +131,11 @@ while True:
 
         #Check if the value is in the ring
 
-        flag=FALSE
+        flag=False
 
         for i in node.Node_Data:
             if i==value:
-                print("Movie:",value,"in node",node.ID)
+                print("Movie:",value," Key:",key,"in node",node.ID)
                 flag=True
         if flag==False:
             print("Movie not found!")      

@@ -103,6 +103,7 @@ class Ring:
         
         the_node = self.Find_ID(self._startNode,ID)
         the_node.Node_Data.append(data)
+        print("Value: ",data," Added")
 
     #Delete a value based on a key
 
@@ -123,6 +124,7 @@ class Ring:
             if i==data:
                 flag=False
                 the_node.Node_Data.remove(i)
+                print("Value: ",i," Deleted")
 
         #Check if value is found
 
