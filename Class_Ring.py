@@ -288,16 +288,16 @@ class Ring:
 
     def Range_Query(self,start,end):
 
-        current=self._startNode
+        current=start
+        
         while TRUE:
-            if current.ID>=start and current.ID<=end:
-                print("Node:",current.ID)
-                self.LookData(current.ID)
+            # if current.ID>=start.ID and current.ID<end.ID:
+            print("Node:",current.ID)
+            self.LookData(current.ID)
 
-            current=current.next
-            if current==self._startNode:
+            if current.ID==end.ID:
                 return
-
+            current=current.next
 
         
     def KNN(self,target,kn):
