@@ -115,10 +115,7 @@ class Ring:
 
         flag=True
 
-        # for i in range(0,len(the_node.Node_Data)):
-        #     if the_node.Node_Data[i]==data:
-        #         flag=False
-        #         the_node.Node_Data.remove(the_node.Node_Data[i])
+        #Removing the value from the Node
 
         for i in the_node.Node_Data:
             if i==data:
@@ -133,16 +130,21 @@ class Ring:
 
     #Display all values in a node based on ID/key
 
-    def LookData(self,target_id):
+    def LookData(self,target_id,mode=0):
 
-        # ID=self.hash_sha1(value)
+        #Mode 0 shows all values of a node
+        #Mode 1 shows all values of a key
 
         the_node=self.Find_ID(self._startNode,target_id)
 
         print("Key : ", the_node.ID)
 
         for i in range(len(the_node.Node_Data)):
-            print('(','value:',the_node.Node_Data[i],')')
+            if mode==0:
+                print('(','value:',the_node.Node_Data[i],')')
+            elif mode ==1:
+                if target_id==self.hash_sha1(the_node.Node_Data[i]):
+                    print('(','value:',the_node.Node_Data[i],')')
 
 
 
@@ -307,33 +309,34 @@ class Ring:
     #kNN Querry
         
     def KNN(self,target,kn):
+        if kn!=0:
 
-        #Find the nearst node to the target ID/key
-        target_node=self.Find_ID(self._startNode,target)
+            #Find the nearst node to the target ID/key
+            target_node=self.Find_ID(self._startNode,target)
 
-        #If to previus  node is nearst to the target than the next
-        if self.Distance(target_node.ID,target)>self.Distance(target_node.prev.ID,target):
-            target_node=target_node.prev
+            #If to previus  node is nearst to the target than the next
+            if self.Distance(target_node.ID,target)>self.Distance(target_node.prev.ID,target):
+                target_node=target_node.prev
 
-        #Print target node
+            #Print target node
 
-        print("Node:",target_node.ID)
-        self.LookData(target_node.ID)
+            print("Node:",target_node.ID)
+            self.LookData(target_node.ID)
 
-        #Pointer for the low and high ID printed till now
-        next_target=target_node.next
-        prev_target=target_node.prev
+            #Pointer for the low and high ID printed till now
+            next_target=target_node.next
+            prev_target=target_node.prev
 
-        #Find and print the rest of the nodes
-        for i in range(kn-1):
-            if self.Distance(target,next_target.ID)>self.Distance(prev_target.ID,target):
-                print("Node:",prev_target.ID)
-                self.LookData(prev_target.ID)
-                prev_target=prev_target.prev
-            else:
-                print("Node:",next_target.ID)
-                self.LookData(next_target.ID)
-                next_target=next_target.next
+            #Find and print the rest of the nodes
+            for i in range(kn-1):
+                if self.Distance(target,next_target.ID)>self.Distance(prev_target.ID,target):
+                    print("Node:",prev_target.ID)
+                    self.LookData(prev_target.ID)
+                    prev_target=prev_target.prev
+                else:
+                    print("Node:",next_target.ID)
+                    self.LookData(next_target.ID)
+                    next_target=next_target.next
     
     #Destroy nodes by changing the pointers in the ring to None
     def Destroy(self,De_List):
