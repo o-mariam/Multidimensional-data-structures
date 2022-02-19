@@ -171,18 +171,6 @@ while True:
     elif choice == "10":
         break
 
-    elif choice == "11":
-        g = int(input("give extra movies: "))
-        #Loading the values from the csv and then into a list
-
-        data = pd.read_csv("dataa.csv", usecols = ["Series_Title"]).head(values)
-        value_list = data["Series_Title"].astype(str).tolist()
-
-        #Inserting the values to the node holding the key
-
-        for i in range(values,values+g):
-            ring1.InsertKey(value_list[i])
-            values = values+g
 
     #Catch wrong input outside the menu range    
     else:
