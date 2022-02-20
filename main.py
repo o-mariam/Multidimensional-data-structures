@@ -91,9 +91,9 @@ while True:
     #UPDATE RECORD on KEY
 
     elif choice == "5": 
-        node_ID = int(input("Input node value key: "))
+        node_ID = int(input("Input value key: "))
         t.tic()
-        ring1.LookData(node_ID)
+        ring1.LookData(node_ID,1)
         t.toc("UPDATE RECORD TIME: ")
 
 

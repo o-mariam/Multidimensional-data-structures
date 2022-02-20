@@ -1,3 +1,4 @@
+from enum import Flag
 import hashlib
 from pickle import TRUE
 import sys
@@ -137,14 +138,20 @@ class Ring:
 
         the_node=self.Find_ID(self._startNode,target_id)
 
-        print("Key : ", the_node.ID)
-
-        for i in range(len(the_node.Node_Data)):
+        print("Node ID : ", the_node.ID)
+        flag = False
+        for i in the_node.Node_Data:
             if mode==0:
-                print('(','value:',the_node.Node_Data[i],')')
+                print('(','value:',i,')')
+                flag = True
             elif mode ==1:
-                if target_id==self.hash_sha1(the_node.Node_Data[i]):
-                    print('(','value:',the_node.Node_Data[i],')')
+                if target_id==self.hash_sha1(i):
+                    print('(','value:',i,"Key: ",target_id,"In node: ",the_node.ID,')')
+                    flag = True
+                if flag == False:
+                    print("No value found for key",target_id)
+
+        
 
 
 
@@ -170,6 +177,7 @@ class Ring:
             The_Node.prev=New_Node
             Node_prev.fingerTable[0]=New_Node
             Node_prev.next=New_Node
+
 
             #Move data to the new node from the next
 
@@ -197,6 +205,9 @@ class Ring:
             prev_node = Del_Node.prev
             next_node.prev=prev_node
             prev_node.next=next_node
+
+
+
 
             #move values to the next node
             for data in Del_Node.Node_Data: 
