@@ -59,7 +59,7 @@ The data used for the experiments comes from the GFZ German Research Centre for 
 
 3. **Execute the Main Script**:
    ```
-   python main_script.py
+   python Class_Ring.py
    ```
 
 ---
